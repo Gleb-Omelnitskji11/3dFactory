@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7804249235886615316}
   - component: {fileID: 2852300958121264012}
   - component: {fileID: 6199383704203146495}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Stock
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -50,6 +50,7 @@ MonoBehaviour:
   Capacity: 10
   CurrentAmount: 0
   AcceptedType: 0
+  _tickInterval: 0.5
 --- !u!33 &7804249235886615316
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -115,9 +116,9 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.0000001, y: 1.0000004, z: 6.1232356e-17}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 1.0000001, y: 1.0000004, z: 1}
+  m_Center: {x: 0, y: 0, z: -0.44}

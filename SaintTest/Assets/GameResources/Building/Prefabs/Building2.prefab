@@ -9,10 +9,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6803142633434239597}
+  - component: {fileID: 5146636035505428741}
   - component: {fileID: 1919559961134682936}
   - component: {fileID: 6518024740298733422}
   - component: {fileID: 2719718876654309748}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Building2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -37,6 +38,23 @@ Transform:
   - {fileID: 1531921958643958595}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5146636035505428741
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5052272843473793691}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56b6490b64b4fdc4d988bc1d2e4c3671, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  InputStorage: {fileID: 9056277997514468310}
+  OutputStorage: {fileID: 3264765336266851721}
+  ProduceType: 1
+  ProductionTime: 2
+  _isWorking: 0
 --- !u!33 &1919559961134682936
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -119,7 +137,7 @@ GameObject:
   - component: {fileID: 2735617264605562003}
   - component: {fileID: 4188890684479450814}
   - component: {fileID: 5825870256843700661}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Tube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -265,6 +283,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6076502558986528658, guid: 4b6338c2c6cc96b42826742dfa086564, type: 3}
   m_PrefabInstance: {fileID: 1294488143034321550}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &9056277997514468310 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7807182097169064280, guid: 4b6338c2c6cc96b42826742dfa086564, type: 3}
+  m_PrefabInstance: {fileID: 1294488143034321550}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b3b832b85f2c4d4ab81bb351275db69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &4690050438303376593
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -329,6 +358,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7807182097169064280, guid: 4b6338c2c6cc96b42826742dfa086564, type: 3}
+      propertyPath: AcceptedType
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -339,3 +372,14 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6076502558986528658, guid: 4b6338c2c6cc96b42826742dfa086564, type: 3}
   m_PrefabInstance: {fileID: 4690050438303376593}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &3264765336266851721 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7807182097169064280, guid: 4b6338c2c6cc96b42826742dfa086564, type: 3}
+  m_PrefabInstance: {fileID: 4690050438303376593}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b3b832b85f2c4d4ab81bb351275db69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

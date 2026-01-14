@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -16,6 +15,7 @@ public class Building : MonoBehaviour
 
     private void Start()
     {
+        if (_isWorking)
         StartCoroutine(ProductionLoop());
     }
 
@@ -25,8 +25,9 @@ public class Building : MonoBehaviour
         {
             if (!CanProduce())
             {
+                _isWorking = false;
                 UpdateStatus();
-                yield return null;
+                yield return new WaitForSeconds(ProductionTime);
                 continue;
             }
 
@@ -53,10 +54,10 @@ public class Building : MonoBehaviour
 
     private void UpdateStatus()
     {
-        if (OutputStorage != null && !OutputStorage.CanAdd())
-            Debug.LogError($"Output storage full for {gameObject.name}");
-        else if (InputStorage != null && !InputStorage.HasItem())
-            Debug.LogError($"No input resources for {gameObject.name}");
+        if (OutputStorage != null && !OutputStorage.CanAdd()){}
+            //Debug.LogError($"Output storage full for {gameObject.name}");
+        else if (InputStorage != null && !InputStorage.HasItem()){}
+            //Debug.LogError($"No input resources for {gameObject.name}");
         else
             Debug.Log($"Producing... for {gameObject.name}");
     }
