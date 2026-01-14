@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2544027609555528724}
   - component: {fileID: 5258513705878643462}
   - component: {fileID: 1545528000143660319}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -66,6 +66,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MaxCapacity: 20
+  _items: []
 --- !u!136 &5258513705878643462
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -114,7 +115,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 1
-  m_Constraints: 36
+  m_Constraints: 84
   m_CollisionDetection: 0
 --- !u!1 &1549383999718274469
 GameObject:
@@ -127,7 +128,7 @@ GameObject:
   - component: {fileID: 8437848890859294734}
   - component: {fileID: 4693580157683252053}
   - component: {fileID: 1781335121732036131}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: MainCamera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -142,13 +143,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1549383999718274469}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.4584741, y: -0.024579147, z: 0.012686243, w: 0.8882773}
-  m_LocalPosition: {x: 0, y: 32.449997, z: -30.4}
+  m_LocalRotation: {x: 0.38566446, y: 0, z: 0, w: 0.92263913}
+  m_LocalPosition: {x: 0, y: 20.7, z: -15.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7092305960906933089}
-  m_LocalEulerAnglesHint: {x: 125.4, y: 176.83, z: 180}
+  m_LocalEulerAnglesHint: {x: 45.37, y: 0, z: 0}
 --- !u!20 &4693580157683252053
 Camera:
   m_ObjectHideFlags: 0
@@ -218,7 +219,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6846921201524920886}
   - component: {fileID: 7189744614675876233}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: LightConeSR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -303,7 +304,7 @@ GameObject:
   - component: {fileID: 6641668725070417107}
   - component: {fileID: 2337871322026753184}
   - component: {fileID: 3226340989494089494}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: PlayerMesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -388,7 +389,7 @@ GameObject:
   - component: {fileID: 5630047308924014411}
   - component: {fileID: 3764857421259199572}
   - component: {fileID: 7625740960544484454}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: EyeMesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}

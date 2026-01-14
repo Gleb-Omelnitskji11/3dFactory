@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,29 +6,32 @@ using UnityEngine;
 public class Storage : MonoBehaviour
 {
     public int Capacity;
-    public int CurrentAmount;
     public ResourceType AcceptedType;
+    [SerializeField] private bool _isOutput;
     [SerializeField] private float _tickInterval = 0.5f;
 
     private bool _isPlayerInside;
-    private PlayerInventory _currentInventory;
+    private PlayerInventory _movingInventory;
 
-    private readonly Queue<ResourceModel> _items = new();
+    [SerializeField] private List<ResourceModel> _items = new();
 
     public bool CanAdd() => _items.Count < Capacity;
     public bool HasItem() => _items.Count > 0;
 
-    public void Add(ResourceType type)
+    public void Add(ResourceModel item)
     {
-        var item = new ResourceModel() { Amount = 1, Type = AcceptedType };
-        _items.Enqueue(item);
-        CurrentAmount += item.Amount;
+        if (!CanAdd())
+            return;
+        _items.Add(item);
     }
 
     public ResourceModel Remove()
     {
-        var item = _items.Dequeue();
-        CurrentAmount -= item.Amount;
+        if (!HasItem())
+            return null;
+        
+        var item = _items[^1];
+        _items.RemoveAt(_items.Count - 1);
         return item;
     }
 
@@ -35,59 +39,66 @@ public class Storage : MonoBehaviour
     {
         if (other.TryGetComponent(out PlayerInventory inventory))
         {
-            Debug.Log("Player come");
-            _currentInventory = inventory;
+            _movingInventory = inventory;
             _isPlayerInside = true;
-            StartCoroutine(GiveItemsInPlayerInventory());
+            StartCoroutine(MoveItems());
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
         if (other.TryGetComponent(out PlayerInventory inventory) &&
-            inventory == _currentInventory)
+            inventory == _movingInventory)
         {
-            Debug.Log("Player exit");
             _isPlayerInside = false;
-            _currentInventory = null;
+            _movingInventory = null;
         }
     }
 
-    private IEnumerator GiveItemsInPlayerInventory()
+    private IEnumerator MoveItems()
     {
         while (_isPlayerInside)
         {
-            if (CurrentAmount > 0)
+            if (_isOutput && !TryGiveItems() || !_isOutput && !TryTakeItems())
             {
-                int taken = Mathf.Min(1, CurrentAmount);
-                ResourceModel item = Remove();
-                bool accepted = _currentInventory.TryAdd(item);
-
-                if (!accepted)
-                {
-                    Debug.LogError(
-                        $"Break CollectRoutine _isPlayerInside{_isPlayerInside}, CurrentAmount {CurrentAmount}");
-                    yield break;
-                }
-
-                CurrentAmount -= taken;
+                //receiving inventory is full
+                yield break;
             }
 
             yield return new WaitForSeconds(_tickInterval);
         }
-
-        Debug.LogError($"Stop CollectRoutine _isPlayerInside{_isPlayerInside}, CurrentAmount {CurrentAmount}");
     }
 
-    private bool TryTakeItemFromStock(out ResourceModel item)
+    private bool TryGiveItems()
     {
-        if (CurrentAmount <= 0)
+        if (HasItem())
         {
-            item = null;
-            return false;
+            ResourceModel item = Remove();
+            bool accepted = _movingInventory.TryAdd(item);
+
+            if (!accepted)
+            {
+                return false;
+            }
         }
 
-        item = new ResourceModel() { Amount = 1, Type = AcceptedType };
+        return true;
+    }
+
+    private bool TryTakeItems()
+    {
+        if (CanAdd())
+        {
+            bool accepted = _movingInventory.TryGet(AcceptedType, out ResourceModel item);
+
+            if (!accepted)
+            {
+                return false;
+            }
+
+            Add(item);
+        }
+
         return true;
     }
 }

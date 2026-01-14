@@ -53,8 +53,9 @@ MonoBehaviour:
   InputStorage: {fileID: 9056277997514468310}
   OutputStorage: {fileID: 3264765336266851721}
   ProduceType: 1
-  ProductionTime: 2
-  _isWorking: 0
+  ProductionTime: 3
+  _isWorking: 1
+  tempIndex: 0
 --- !u!33 &1919559961134682936
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -357,6 +358,10 @@ PrefabInstance:
     - target: {fileID: 6076502558986528658, guid: 4b6338c2c6cc96b42826742dfa086564, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7807182097169064280, guid: 4b6338c2c6cc96b42826742dfa086564, type: 3}
+      propertyPath: _isOutput
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7807182097169064280, guid: 4b6338c2c6cc96b42826742dfa086564, type: 3}
       propertyPath: AcceptedType

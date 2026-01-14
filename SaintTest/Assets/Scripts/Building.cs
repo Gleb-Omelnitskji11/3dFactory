@@ -1,5 +1,4 @@
 using System.Collections;
-using TMPro;
 using UnityEngine;
 
 public class Building : MonoBehaviour
@@ -10,12 +9,10 @@ public class Building : MonoBehaviour
     public ResourceType ProduceType;
     public float ProductionTime;
 
-    [SerializeField]
-    private bool _isWorking;
+    [SerializeField] private bool _isWorking;
 
     private void Start()
     {
-        if (_isWorking)
         StartCoroutine(ProductionLoop());
     }
 
@@ -35,9 +32,14 @@ public class Building : MonoBehaviour
             UpdateStatus();
 
             yield return new WaitForSeconds(ProductionTime);
-
             InputStorage?.Remove();
-            OutputStorage.Add(ProduceType);
+
+            ResourceModel item = new ResourceModel()
+            {
+                Type = ProduceType,
+                Amount = 1
+            };
+            OutputStorage.Add(item);
         }
     }
 
@@ -54,11 +56,11 @@ public class Building : MonoBehaviour
 
     private void UpdateStatus()
     {
-        if (OutputStorage != null && !OutputStorage.CanAdd()){}
-            //Debug.LogError($"Output storage full for {gameObject.name}");
-        else if (InputStorage != null && !InputStorage.HasItem()){}
-            //Debug.LogError($"No input resources for {gameObject.name}");
-        else
-            Debug.Log($"Producing... for {gameObject.name}");
+        // if (OutputStorage != null && !OutputStorage.CanAdd())
+        //     Debug.LogError($"Output storage full for {gameObject.name}");
+        // else if (InputStorage != null && !InputStorage.HasItem())
+        //     Debug.LogError($"No input resources for {gameObject.name}");
+        // else
+        //     Debug.Log($"Producing... for {gameObject.name}");
     }
 }

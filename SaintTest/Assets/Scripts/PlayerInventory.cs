@@ -4,8 +4,7 @@ using UnityEngine;
 public class PlayerInventory : MonoBehaviour
 {
     public int MaxCapacity;
-    public int CurrentAmount;
-    private readonly List<ResourceModel> _items = new();
+    [SerializeField] private List<ResourceModel> _items = new();
 
     public bool CanTake() => _items.Count < MaxCapacity;
 
@@ -15,7 +14,6 @@ public class PlayerInventory : MonoBehaviour
         {
             Debug.Log("Add item to player inventory");
             _items.Add(item);
-            CurrentAmount += item.Amount;
             return true;
         }
 
@@ -23,11 +21,19 @@ public class PlayerInventory : MonoBehaviour
         return false;
     }
 
-    public ResourceModel Remove(ResourceType type)
+    public bool TryGet(ResourceType type, out ResourceModel item)
     {
-        var item = _items.FindLast(x => x.Type == type);
-        _items.RemoveAt(_items.Count - 1);
-        CurrentAmount--;
-        return item;
+        int lastIndex = _items.FindLastIndex(x => x.Type == type);
+        if (lastIndex == -1)
+        {
+            item = null;
+            return false;
+        }
+        
+        
+        item = _items[lastIndex];
+        _items.RemoveAt(lastIndex);
+
+        return true;
     }
 }
