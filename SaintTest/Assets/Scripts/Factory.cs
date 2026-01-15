@@ -1,13 +1,13 @@
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class Building : MonoBehaviour
+public class Factory : MonoBehaviour
 {
     public Storage InputStorage;
     public Storage OutputStorage;
-
-    public ResourceType ProduceType;
-    public float ProductionTime;
+    public Recipe _recipe;
 
     [SerializeField] private bool _isWorking;
 
@@ -24,20 +24,23 @@ public class Building : MonoBehaviour
             {
                 _isWorking = false;
                 UpdateStatus();
-                yield return new WaitForSeconds(ProductionTime);
+                yield return new WaitForSeconds(_recipe.ProductionTime);
                 continue;
             }
 
             _isWorking = true;
             UpdateStatus();
 
-            yield return new WaitForSeconds(ProductionTime);
-            InputStorage?.Remove();
+            yield return new WaitForSeconds(_recipe.ProductionTime);
+            foreach (var ingredient in _recipe.Ingredients)
+            {
+                InputStorage?.Remove(ingredient.Type);
+            }
 
             ResourceModel item = new ResourceModel()
             {
-                Type = ProduceType,
-                Amount = 1
+                Type = _recipe.Result.Type,
+                Amount = _recipe.Result.Amount,
             };
             OutputStorage.Add(item);
         }
@@ -45,10 +48,10 @@ public class Building : MonoBehaviour
 
     private bool CanProduce()
     {
-        if (OutputStorage != null && !OutputStorage.CanAdd())
+        if (!OutputStorage.CanAdd(_recipe.Result.Type))
             return false;
 
-        if (InputStorage != null && !InputStorage.HasItem())
+        if (_recipe.Ingredients.Count > 0 && !InputStorage.HasItems(_recipe.Ingredients))
             return false;
 
         return true;
@@ -63,4 +66,12 @@ public class Building : MonoBehaviour
         // else
         //     Debug.Log($"Producing... for {gameObject.name}");
     }
+}
+
+[Serializable]
+public class Recipe
+{
+    public List<ResourceModel> Ingredients = new List<ResourceModel>();
+    public ResourceModel Result;
+    public float ProductionTime;
 }

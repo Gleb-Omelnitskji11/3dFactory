@@ -52,10 +52,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   InputStorage: {fileID: 9056277997514468310}
   OutputStorage: {fileID: 3264765336266851721}
-  ProduceType: 1
-  ProductionTime: 3
+  _recipe:
+    Ingredients:
+    - Type: 0
+      Amount: 1
+    Result:
+      Type: 1
+      Amount: 1
+    ProductionTime: 2
   _isWorking: 1
-  tempIndex: 0
 --- !u!33 &1919559961134682936
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -274,6 +279,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7807182097169064280, guid: 4b6338c2c6cc96b42826742dfa086564, type: 3}
+      propertyPath: _acceptedTypes.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -365,6 +374,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7807182097169064280, guid: 4b6338c2c6cc96b42826742dfa086564, type: 3}
       propertyPath: AcceptedType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7807182097169064280, guid: 4b6338c2c6cc96b42826742dfa086564, type: 3}
+      propertyPath: _acceptedTypes.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7807182097169064280, guid: 4b6338c2c6cc96b42826742dfa086564, type: 3}
+      propertyPath: _acceptedTypes.Array.data[0]
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []

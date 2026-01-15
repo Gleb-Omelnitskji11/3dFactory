@@ -134,10 +134,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   InputStorage: {fileID: 0}
   OutputStorage: {fileID: 6649577719628714832}
-  ProduceType: 0
-  ProductionTime: 2
+  _recipe:
+    Ingredients: []
+    Result:
+      Type: 0
+      Amount: 1
+    ProductionTime: 1
   _isWorking: 1
-  tempIndex: 0
 --- !u!33 &8135764783875721541
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -279,6 +282,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7807182097169064280, guid: 4b6338c2c6cc96b42826742dfa086564, type: 3}
       propertyPath: _isOutput
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7807182097169064280, guid: 4b6338c2c6cc96b42826742dfa086564, type: 3}
+      propertyPath: _acceptedTypes.Array.size
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []

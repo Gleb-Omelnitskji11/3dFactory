@@ -13,7 +13,15 @@ public class PlayerInventory : MonoBehaviour
         if (_items.Count < MaxCapacity)
         {
             Debug.Log("Add item to player inventory");
-            _items.Add(item);
+            if (_items.Contains(item))
+            {
+                Debug.LogError("Add duplicate");
+            }
+            else
+            {
+                _items.Add(item);
+            }
+
             return true;
         }
 
@@ -29,8 +37,8 @@ public class PlayerInventory : MonoBehaviour
             item = null;
             return false;
         }
-        
-        
+
+
         item = _items[lastIndex];
         _items.RemoveAt(lastIndex);
 

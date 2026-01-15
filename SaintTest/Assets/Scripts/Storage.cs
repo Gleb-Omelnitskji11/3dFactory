@@ -1,37 +1,66 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Storage : MonoBehaviour
 {
-    public int Capacity;
-    public ResourceType AcceptedType;
+    [SerializeField] private int _capacity = 10;
+    [SerializeField] private List<ResourceType> _acceptedTypes;
     [SerializeField] private bool _isOutput;
     [SerializeField] private float _tickInterval = 0.5f;
+
+    private Dictionary<ResourceType, List<ResourceModel>> _itemsByType;
 
     private bool _isPlayerInside;
     private PlayerInventory _movingInventory;
 
-    [SerializeField] private List<ResourceModel> _items = new();
+    private int CapacityPerType => _capacity / _acceptedTypes.Count;
 
-    public bool CanAdd() => _items.Count < Capacity;
-    public bool HasItem() => _items.Count > 0;
+    private void Awake()
+    {
+        _itemsByType = new Dictionary<ResourceType, List<ResourceModel>>();
+
+        foreach (var type in _acceptedTypes)
+            _itemsByType[type] = new List<ResourceModel>();
+    }
+
+    public bool CanAdd(ResourceType type)
+    {
+        return _itemsByType[type].Count < CapacityPerType;
+    }
+    
+    public bool HasItems(List<ResourceModel> ingridients)
+    {
+        foreach (var item in ingridients)
+        {
+            if(_itemsByType[item.Type].Count < item.Amount)
+                return false;
+        }
+        return true;
+    }
+
+    public bool HasItem(ResourceType type)
+    {
+        return _itemsByType[type].Count > 0;
+    }
 
     public void Add(ResourceModel item)
     {
-        if (!CanAdd())
+        var type = item.Type;
+        if (!CanAdd(type))
             return;
-        _items.Add(item);
+
+        _itemsByType[type].Add(item);
     }
 
-    public ResourceModel Remove()
+    public ResourceModel Remove(ResourceType type)
     {
-        if (!HasItem())
+        if (!HasItem(type))
             return null;
-        
-        var item = _items[^1];
-        _items.RemoveAt(_items.Count - 1);
+
+        var list = _itemsByType[type];
+        var item = list[^1];
+        list.RemoveAt(list.Count - 1);
         return item;
     }
 
@@ -59,11 +88,9 @@ public class Storage : MonoBehaviour
     {
         while (_isPlayerInside)
         {
-            if (_isOutput && !TryGiveItems() || !_isOutput && !TryTakeItems())
-            {
-                //receiving inventory is full
-                yield break;
-            }
+            bool success = _isOutput ? TryGiveItems() : TryTakeItems();
+            // if (!success)
+            //     yield break;
 
             yield return new WaitForSeconds(_tickInterval);
         }
@@ -71,34 +98,38 @@ public class Storage : MonoBehaviour
 
     private bool TryGiveItems()
     {
-        if (HasItem())
+        foreach (var type in _acceptedTypes)
         {
-            ResourceModel item = Remove();
-            bool accepted = _movingInventory.TryAdd(item);
+            if (!HasItem(type))
+                continue;
 
-            if (!accepted)
+            var item = Remove(type);
+            if (!_movingInventory.TryAdd(item))
             {
+                Add(item);
                 return false;
             }
+
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     private bool TryTakeItems()
     {
-        if (CanAdd())
+        foreach (var type in _acceptedTypes)
         {
-            bool accepted = _movingInventory.TryGet(AcceptedType, out ResourceModel item);
+            if (!CanAdd(type))
+                continue;
 
-            if (!accepted)
+            if (_movingInventory.TryGet(type, out var item))
             {
-                return false;
+                Add(item);
+                return true;
             }
-
-            Add(item);
         }
 
-        return true;
+        return false;
     }
 }

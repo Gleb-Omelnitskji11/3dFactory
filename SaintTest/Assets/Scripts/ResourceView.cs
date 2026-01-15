@@ -11,5 +11,5 @@ public class ResourceView : MonoBehaviour
 public class ResourceModel
 {
     public ResourceType Type;
-    public int Amount;
+    public int Amount = 1;
 }
