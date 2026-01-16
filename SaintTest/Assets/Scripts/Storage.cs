@@ -2,67 +2,105 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Storage : MonoBehaviour
+public class Storage : StorageBase
 {
     [SerializeField] private int _capacity = 10;
     [SerializeField] private List<ResourceType> _acceptedTypes;
     [SerializeField] private bool _isOutput;
     [SerializeField] private float _tickInterval = 0.5f;
 
-    private Dictionary<ResourceType, List<ResourceModel>> _itemsByType;
+    [SerializeField] private ItemsPlacer _itemsPlacer;
+
+    private readonly Dictionary<ResourceType, List<ResourceView>> _itemsByType = new();
+    private readonly Dictionary<ResourceType, int> _capacityPerType = new();
 
     private bool _isPlayerInside;
     private PlayerInventory _movingInventory;
 
-    private int CapacityPerType => _capacity / _acceptedTypes.Count;
-
     private void Awake()
     {
-        _itemsByType = new Dictionary<ResourceType, List<ResourceModel>>();
-
         foreach (var type in _acceptedTypes)
-            _itemsByType[type] = new List<ResourceModel>();
+        {
+            _itemsByType[type] = new List<ResourceView>();
+            _capacityPerType[type] = _capacity / _acceptedTypes.Count;
+        }
     }
 
-    public bool CanAdd(ResourceType type)
+    public override bool CanAdd(ResourceType type)
     {
-        return _itemsByType[type].Count < CapacityPerType;
+        if (!_itemsByType.TryGetValue(type, out var value))
+        {
+            return false;
+        }
+
+        return value.Count < _capacityPerType[type];
     }
-    
-    public bool HasItems(List<ResourceModel> ingridients)
+
+    public override bool HasItems(List<ResourceModel> ingridients)
     {
         foreach (var item in ingridients)
         {
-            if(_itemsByType[item.Type].Count < item.Amount)
+            if (_itemsByType[item.Type].Count < item.Amount)
                 return false;
         }
+
         return true;
     }
 
-    public bool HasItem(ResourceType type)
+    public override bool HasItem(ResourceModel ingridient)
+    {
+        return _itemsByType[ingridient.Type].Count < ingridient.Amount;
+    }
+
+    public override bool TryAdd(ResourceView item)
+    {
+        var type = item.Type;
+        if (!CanAdd(type))
+            return false;
+
+        Add(item);
+        return true;
+    }
+
+    public override bool TryGet(ResourceModel itemModel, out List<ResourceView> items)
+    {
+        if (!HasItem(itemModel) || itemModel.Amount > _itemsByType[itemModel.Type].Count)
+        {
+            items = null;
+            return false;
+        }
+
+        items = GetItems(itemModel);
+        return true;
+    }
+
+    private List<ResourceView> GetItems(ResourceModel itemModel)
+    {
+        List<ResourceView> items = _itemsByType[itemModel.Type]
+            .GetRange(_itemsByType[itemModel.Type].Count - itemModel.Amount, itemModel.Amount);
+        _itemsByType[itemModel.Type]
+            .RemoveRange(_itemsByType[itemModel.Type].Count - itemModel.Amount, itemModel.Amount);
+        return items;
+    }
+
+    private void Remove(ResourceView item)
+    {
+        _itemsByType[item.Type].Remove(item);
+        _itemsPlacer.OnItemRemoved(item);
+    }
+
+    private void Add(ResourceView item)
+    {
+        _itemsByType[item.Type].Add(item);
+        _itemsPlacer.OnItemAdded(item);
+    }
+
+
+    private bool HasItem(ResourceType type)
     {
         return _itemsByType[type].Count > 0;
     }
 
-    public void Add(ResourceModel item)
-    {
-        var type = item.Type;
-        if (!CanAdd(type))
-            return;
-
-        _itemsByType[type].Add(item);
-    }
-
-    public ResourceModel Remove(ResourceType type)
-    {
-        if (!HasItem(type))
-            return null;
-
-        var list = _itemsByType[type];
-        var item = list[^1];
-        list.RemoveAt(list.Count - 1);
-        return item;
-    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -89,8 +127,6 @@ public class Storage : MonoBehaviour
         while (_isPlayerInside)
         {
             bool success = _isOutput ? TryGiveItems() : TryTakeItems();
-            // if (!success)
-            //     yield break;
 
             yield return new WaitForSeconds(_tickInterval);
         }
@@ -103,14 +139,20 @@ public class Storage : MonoBehaviour
             if (!HasItem(type))
                 continue;
 
-            var item = Remove(type);
-            if (!_movingInventory.TryAdd(item))
+            if (_movingInventory.CanAdd())
             {
-                Add(item);
-                return false;
+                var item = _itemsByType[type][^1];
+                Remove(item);
+                if (!_movingInventory.TryAdd(item))
+                {
+                    Add(item);
+                    return false;
+                }
+
+                return true;
             }
 
-            return true;
+            return false;
         }
 
         return false;

@@ -5,9 +5,9 @@ using UnityEngine;
 
 public class Factory : MonoBehaviour
 {
-    public Storage InputStorage;
-    public Storage OutputStorage;
-    public Recipe _recipe;
+    [SerializeField] private StorageBase _inputStorage;
+    [SerializeField] private StorageBase _outputStorage;
+    [SerializeField] private Recipe _recipe;
 
     [SerializeField] private bool _isWorking;
 
@@ -31,27 +31,55 @@ public class Factory : MonoBehaviour
             _isWorking = true;
             UpdateStatus();
 
-            yield return new WaitForSeconds(_recipe.ProductionTime);
-            foreach (var ingredient in _recipe.Ingredients)
+            if (_recipe.Ingredients.Count > 0 && GetIngredientsFromStock(out List<ResourceView> ingredients))
             {
-                InputStorage?.Remove(ingredient.Type);
+                DestroyIngredients(ingredients);
             }
 
-            ResourceModel item = new ResourceModel()
+            yield return new WaitForSeconds(_recipe.ProductionTime);
+
+            ResourceModel itemModel = new ResourceModel()
             {
                 Type = _recipe.Result.Type,
                 Amount = _recipe.Result.Amount,
             };
-            OutputStorage.Add(item);
+            
+            var item = InstanceCreator.Instance.CreateObject(itemModel.Type);
+            _outputStorage.TryAdd(item);
+        }
+    }
+
+    private bool GetIngredientsFromStock(out List<ResourceView> ingredients)
+    {
+        ingredients = new List<ResourceView>();
+        foreach (var ingredient in _recipe.Ingredients)
+        {
+            if (_inputStorage.TryGet(ingredient, out List<ResourceView> items))
+            {
+                ingredients.AddRange(items);
+                continue;
+            }
+            
+            return false;
+        }
+        
+        return true;
+    }
+
+    private void DestroyIngredients(List<ResourceView> ingredients)
+    {
+        foreach (var ingredient in ingredients)
+        {
+            ingredient.Destroy();
         }
     }
 
     private bool CanProduce()
     {
-        if (!OutputStorage.CanAdd(_recipe.Result.Type))
+        if (!_outputStorage.CanAdd(_recipe.Result.Type))
             return false;
 
-        if (_recipe.Ingredients.Count > 0 && !InputStorage.HasItems(_recipe.Ingredients))
+        if (_recipe.Ingredients.Count > 0 && !_inputStorage.HasItems(_recipe.Ingredients))
             return false;
 
         return true;

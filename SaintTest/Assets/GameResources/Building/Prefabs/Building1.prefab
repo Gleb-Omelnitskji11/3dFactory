@@ -132,15 +132,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56b6490b64b4fdc4d988bc1d2e4c3671, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  InputStorage: {fileID: 0}
-  OutputStorage: {fileID: 6649577719628714832}
+  _inputStorage: {fileID: 0}
+  _outputStorage: {fileID: 6649577719628714832}
   _recipe:
     Ingredients: []
     Result:
       Type: 0
       Amount: 1
     ProductionTime: 1
-  _isWorking: 1
+  _isWorking: 0
 --- !u!33 &8135764783875721541
 MeshFilter:
   m_ObjectHideFlags: 0
