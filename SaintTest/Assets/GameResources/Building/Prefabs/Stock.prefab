@@ -49,11 +49,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b3b832b85f2c4d4ab81bb351275db69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _itemsPlacer: {fileID: 74283316653969436}
   _capacity: 10
   _acceptedTypes: 
   _isOutput: 0
-  _tickInterval: 0.5
-  _itemsPlacer: {fileID: 74283316653969436}
 --- !u!114 &74283316653969436
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -67,6 +66,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _itemsRoot: {fileID: 1896593081217862461}
+  Items: []
 --- !u!33 &7804249235886615316
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -147,7 +147,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1896593081217862461}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ItemsRoot
   m_TagString: Untagged
   m_Icon: {fileID: 0}

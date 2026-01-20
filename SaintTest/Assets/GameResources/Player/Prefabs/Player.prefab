@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7041192672684330316}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Inventory
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -45,7 +45,7 @@ GameObject:
   - component: {fileID: 4975892119631119231}
   - component: {fileID: 5258513705878643462}
   - component: {fileID: 1545528000143660319}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -97,9 +97,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e873c33c442afb648a353bd5f06bf69d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _itemsPlacer: {fileID: 4975892119631119231}
   _maxCapacity: 20
   _items: []
-  _itemsPlacer: {fileID: 4975892119631119231}
 --- !u!114 &4975892119631119231
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -175,7 +175,7 @@ GameObject:
   - component: {fileID: 8437848890859294734}
   - component: {fileID: 4693580157683252053}
   - component: {fileID: 1781335121732036131}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: MainCamera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -266,7 +266,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6846921201524920886}
   - component: {fileID: 7189744614675876233}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: LightConeSR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -351,7 +351,7 @@ GameObject:
   - component: {fileID: 6641668725070417107}
   - component: {fileID: 2337871322026753184}
   - component: {fileID: 3226340989494089494}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PlayerModel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -437,7 +437,7 @@ GameObject:
   - component: {fileID: 5630047308924014411}
   - component: {fileID: 3764857421259199572}
   - component: {fileID: 7625740960544484454}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: EyeMesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
