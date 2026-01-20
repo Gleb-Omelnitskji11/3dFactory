@@ -1,26 +1,19 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class StackInventory : ItemsPlacer
 {
-    //private const float StartZ = -0.9f;
-    //private const float ItemDepth = 0.5f;
     private const float DeltaDepth = 0.1f;
+    private readonly StackInventory _stackInventory;
 
-    public override void OnItemAdded(ResourceView item)
+    [SerializeField] private List<ResourceView> Items;
+    
+    public override void Init(StorageBase playerInventory)
     {
-        base.OnItemAdded(item);
-        item.transform.SetParent(_itemsRoot);
-        UpdatePositions();
+        base.Init(playerInventory);
+        Items = playerInventory.Items as List<ResourceView>;
     }
 
-    public override void OnItemRemoved(ResourceView item)
-    {
-        base.OnItemRemoved(item);
-        item.transform.SetParent(null, true);
-        UpdatePositions();
-    }
 
     protected override void UpdatePositions()
     {

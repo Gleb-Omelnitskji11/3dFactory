@@ -54,13 +54,13 @@ MonoBehaviour:
   _outputStorage: {fileID: 3264765336266851721}
   _recipe:
     Ingredients:
-    - Type: 0
-      Amount: 1
+    - _type: 0
+      _amount: 1
     Result:
-      Type: 1
-      Amount: 1
+      _type: 1
+      _amount: 1
     ProductionTime: 2
-  _isWorking: 0
+  _workStatus: 0
 --- !u!33 &1919559961134682936
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -183,7 +183,7 @@ MeshRenderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
+  m_DynamicOccludee: 0
   m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1

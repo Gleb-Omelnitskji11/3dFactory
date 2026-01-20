@@ -4,24 +4,25 @@ using UnityEngine;
 public abstract class ItemsPlacer : MonoBehaviour
 {
     [SerializeField] protected Transform _itemsRoot;
-    [SerializeField] protected List<ResourceView> Items = new List<ResourceView>();
 
-    public void Init(PlayerInventory playerInventory)
+    public virtual void Init(StorageBase playerInventory)
     {
         playerInventory.OnItemRemoved += OnItemRemoved;
         playerInventory.OnItemAdded += OnItemAdded;
     }
 
-    public virtual void OnItemRemoved(ResourceView item)
+    protected virtual void OnItemRemoved(ResourceView item)
     {
-        Items.Remove(item);
         item.gameObject.SetActive(false);
+        item.transform.SetParent(null, true);
+        UpdatePositions();
     }
 
-    public virtual void OnItemAdded(ResourceView item)
+    protected virtual void OnItemAdded(ResourceView item)
     {
-        Items.Add(item);
         item.gameObject.SetActive(true);
+        item.transform.SetParent(_itemsRoot);
+        UpdatePositions();
     }
 
     protected abstract void UpdatePositions();

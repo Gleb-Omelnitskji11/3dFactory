@@ -154,6 +154,7 @@ MonoBehaviour:
   _resourceView1: {fileID: 3671771900342919410, guid: dc7d141669ee6ee43996db01fcafc690, type: 3}
   _resourceView2: {fileID: 1303252727188232044, guid: a0ff526ead0ecc148b2b56ef261b5cfe, type: 3}
   _resourceView3: {fileID: 8535096591046201588, guid: f6abe7d880dba1b46b72e77f67c0fe0c, type: 3}
+  _initialPoolSize: 0
 --- !u!4 &713492246
 Transform:
   m_ObjectHideFlags: 0
@@ -163,7 +164,7 @@ Transform:
   m_GameObject: {fileID: 713492244}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -100, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -477,6 +478,10 @@ PrefabInstance:
     - target: {fileID: 85296177856156134, guid: 055c0b5695e977547a63f42556aec1db, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5336457387313912331, guid: 055c0b5695e977547a63f42556aec1db, type: 3}
+      propertyPath: _recipe.Result._amount
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7367151333723619614, guid: 055c0b5695e977547a63f42556aec1db, type: 3}
       propertyPath: m_Name

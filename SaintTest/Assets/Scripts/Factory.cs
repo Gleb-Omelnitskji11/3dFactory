@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,7 +8,7 @@ public class Factory : MonoBehaviour
     [SerializeField] private StorageBase _outputStorage;
     [SerializeField] private Recipe _recipe;
 
-    [SerializeField] private bool _isWorking;
+    [SerializeField] private WorkStatus _workStatus;
 
     private void Start()
     {
@@ -22,27 +21,25 @@ public class Factory : MonoBehaviour
         {
             if (!CanProduce())
             {
-                _isWorking = false;
-                UpdateStatus();
                 yield return new WaitForSeconds(_recipe.ProductionTime);
                 continue;
             }
 
-            _isWorking = true;
-            UpdateStatus();
-
-            if (_recipe.Ingredients.Count > 0 && GetIngredientsFromStock(out List<ResourceView> ingredients))
+            if (_recipe.Ingredients.Count > 0)
             {
-                DestroyIngredients(ingredients);
+                if(GetIngredientsFromStock(out List<ResourceView> ingredients))
+                    DestroyIngredients(ingredients);
+                else
+                {
+                    _workStatus = WorkStatus.NonResources;
+                    yield return new WaitForSeconds(_recipe.ProductionTime);
+                    continue;
+                }
             }
 
             yield return new WaitForSeconds(_recipe.ProductionTime);
 
-            ResourceModel itemModel = new ResourceModel()
-            {
-                Type = _recipe.Result.Type,
-                Amount = _recipe.Result.Amount,
-            };
+            ResourceModel itemModel = new ResourceModel(_recipe.Result.Type, _recipe.Result.Amount);
             
             var item = InstanceCreator.Instance.CreateObject(itemModel.Type);
             _outputStorage.TryAdd(item);
@@ -77,29 +74,45 @@ public class Factory : MonoBehaviour
     private bool CanProduce()
     {
         if (!_outputStorage.CanAdd(_recipe.Result.Type))
+        {
+            OnDone();
             return false;
+        }
 
         if (_recipe.Ingredients.Count > 0 && !_inputStorage.HasItems(_recipe.Ingredients))
+        {
+            OnNonResources();
             return false;
+        }
 
+        _workStatus = WorkStatus.Working;
         return true;
     }
 
-    private void UpdateStatus()
+    private void OnNonResources()
     {
-        // if (OutputStorage != null && !OutputStorage.CanAdd())
-        //     Debug.LogError($"Output storage full for {gameObject.name}");
-        // else if (InputStorage != null && !InputStorage.HasItem())
-        //     Debug.LogError($"No input resources for {gameObject.name}");
-        // else
-        //     Debug.Log($"Producing... for {gameObject.name}");
+        if (_workStatus != WorkStatus.NonResources)
+        {
+            Debug.LogError($"No input resources for {gameObject.name}");
+        }
+        
+        _workStatus = WorkStatus.NonResources;
+    }
+
+    private void OnDone()
+    {
+        if (_workStatus != WorkStatus.Done)
+        {
+            Debug.LogError($"Output storage full for {gameObject.name}");
+        }
+        
+        _workStatus = WorkStatus.Done;
     }
 }
 
-[Serializable]
-public class Recipe
+public enum WorkStatus
 {
-    public List<ResourceModel> Ingredients = new List<ResourceModel>();
-    public ResourceModel Result;
-    public float ProductionTime;
+    Working,
+    Done,
+    NonResources
 }

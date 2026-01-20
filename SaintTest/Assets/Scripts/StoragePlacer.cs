@@ -1,20 +1,21 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class StoragePlacer : ItemsPlacer
 {
-    private const float DeltaDepth = 0.1f;
+    private const float DeltaDepth = 0.05f;
+    [SerializeField] private List<ResourceView> Items;
 
-    public override void OnItemAdded(ResourceView item)
+    protected override void OnItemAdded(ResourceView item)
     {
+        Items.Add(item);
         base.OnItemAdded(item);
-        item.transform.SetParent(_itemsRoot);
-        UpdatePositions();
     }
 
-    public override void OnItemRemoved(ResourceView item)
+    protected override void OnItemRemoved(ResourceView item)
     {
+        Items.Remove(item);
         base.OnItemRemoved(item);
-        UpdatePositions();
     }
 
     protected override void UpdatePositions()

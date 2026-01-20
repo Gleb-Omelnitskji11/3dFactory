@@ -7,18 +7,19 @@ public class Storage : StorageBase
     [SerializeField] private int _capacity = 10;
     [SerializeField] private List<ResourceType> _acceptedTypes;
     [SerializeField] private bool _isOutput;
-    [SerializeField] private float _tickInterval = 0.5f;
+    private const float ItemMovingDelay = 0.5f;
 
-    [SerializeField] private ItemsPlacer _itemsPlacer;
-
-    private readonly Dictionary<ResourceType, List<ResourceView>> _itemsByType = new();
+    private readonly SortedDictionary<ResourceType, List<ResourceView>> _itemsByType = new();
     private readonly Dictionary<ResourceType, int> _capacityPerType = new();
 
     private bool _isPlayerInside;
     private PlayerInventory _movingInventory;
 
-    private void Awake()
+    public override object Items => _itemsByType;
+
+    protected override void Awake()
     {
+        base.Awake();
         foreach (var type in _acceptedTypes)
         {
             _itemsByType[type] = new List<ResourceView>();
@@ -49,7 +50,7 @@ public class Storage : StorageBase
 
     public override bool HasItem(ResourceModel ingridient)
     {
-        return _itemsByType[ingridient.Type].Count < ingridient.Amount;
+        return _itemsByType[ingridient.Type].Count >= ingridient.Amount;
     }
 
     public override bool TryAdd(ResourceView item)
@@ -64,7 +65,7 @@ public class Storage : StorageBase
 
     public override bool TryGet(ResourceModel itemModel, out List<ResourceView> items)
     {
-        if (!HasItem(itemModel) || itemModel.Amount > _itemsByType[itemModel.Type].Count)
+        if (!HasItem(itemModel))
         {
             items = null;
             return false;
@@ -74,25 +75,48 @@ public class Storage : StorageBase
         return true;
     }
 
+    public override bool TryGet(ResourceType itemType, out ResourceView item)
+    {
+        if (!_itemsByType.TryGetValue(itemType, out var itemsType))
+        {
+            item = null;
+            return false;
+        }
+
+        int lastIndex = itemsType.FindLastIndex(x => x.Type == itemType);
+        if (lastIndex == -1)
+        {
+            item = null;
+            return false;
+        }
+
+        item = itemsType[lastIndex];
+        Remove(item);
+
+        return true;
+    }
+
     private List<ResourceView> GetItems(ResourceModel itemModel)
     {
-        List<ResourceView> items = _itemsByType[itemModel.Type]
-            .GetRange(_itemsByType[itemModel.Type].Count - itemModel.Amount, itemModel.Amount);
-        _itemsByType[itemModel.Type]
-            .RemoveRange(_itemsByType[itemModel.Type].Count - itemModel.Amount, itemModel.Amount);
+        List<ResourceView> items = _itemsByType[itemModel.Type].GetRange(_itemsByType[itemModel.Type].Count - itemModel.Amount, itemModel.Amount);
+
+        foreach (var item in items)
+        {
+            Remove(item);
+        }
         return items;
     }
 
     private void Remove(ResourceView item)
     {
-        _itemsByType[item.Type].Remove(item);
-        _itemsPlacer.OnItemRemoved(item);
+        if(_itemsByType[item.Type].Remove(item))
+            base.RemoveItem(item);
     }
 
     private void Add(ResourceView item)
     {
         _itemsByType[item.Type].Add(item);
-        _itemsPlacer.OnItemAdded(item);
+        base.AddItem(item);
     }
 
 
@@ -128,7 +152,7 @@ public class Storage : StorageBase
         {
             bool success = _isOutput ? TryGiveItems() : TryTakeItems();
 
-            yield return new WaitForSeconds(_tickInterval);
+            yield return new WaitForSeconds(ItemMovingDelay);
         }
     }
 
