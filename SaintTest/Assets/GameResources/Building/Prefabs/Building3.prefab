@@ -137,15 +137,15 @@ MonoBehaviour:
   _inputStorage: {fileID: 7140587001215834630}
   _outputStorage: {fileID: 2901719868738843930}
   _recipe:
-    Ingredients:
+    _ingredients:
     - _type: 0
       _amount: 1
     - _type: 1
       _amount: 1
-    Result:
+    _result:
       _type: 2
       _amount: 1
-    ProductionTime: 5
+    _productionTime: 3
   _workStatus: 0
 --- !u!33 &6354562060768301008
 MeshFilter:

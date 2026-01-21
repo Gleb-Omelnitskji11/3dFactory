@@ -7,7 +7,6 @@ public class Storage : StorageBase
     [SerializeField] private int _capacity = 10;
     [SerializeField] private List<ResourceType> _acceptedTypes;
     [SerializeField] private bool _isOutput;
-    private const float ItemMovingDelay = 0.5f;
 
     private readonly SortedDictionary<ResourceType, List<ResourceView>> _itemsByType = new();
     private readonly Dictionary<ResourceType, int> _capacityPerType = new();
@@ -15,7 +14,6 @@ public class Storage : StorageBase
     private bool _isPlayerInside;
     private PlayerInventory _movingInventory;
 
-    public override object Items => _itemsByType;
 
     protected override void Awake()
     {
@@ -83,14 +81,7 @@ public class Storage : StorageBase
             return false;
         }
 
-        int lastIndex = itemsType.FindLastIndex(x => x.Type == itemType);
-        if (lastIndex == -1)
-        {
-            item = null;
-            return false;
-        }
-
-        item = itemsType[lastIndex];
+        item = itemsType[^1];
         Remove(item);
 
         return true;
@@ -98,18 +89,20 @@ public class Storage : StorageBase
 
     private List<ResourceView> GetItems(ResourceModel itemModel)
     {
-        List<ResourceView> items = _itemsByType[itemModel.Type].GetRange(_itemsByType[itemModel.Type].Count - itemModel.Amount, itemModel.Amount);
+        List<ResourceView> items = _itemsByType[itemModel.Type]
+            .GetRange(_itemsByType[itemModel.Type].Count - itemModel.Amount, itemModel.Amount);
 
         foreach (var item in items)
         {
             Remove(item);
         }
+
         return items;
     }
 
     private void Remove(ResourceView item)
     {
-        if(_itemsByType[item.Type].Remove(item))
+        if (_itemsByType[item.Type].Remove(item))
             base.RemoveItem(item);
     }
 
@@ -152,7 +145,7 @@ public class Storage : StorageBase
         {
             bool success = _isOutput ? TryGiveItems() : TryTakeItems();
 
-            yield return new WaitForSeconds(ItemMovingDelay);
+            yield return new WaitForSeconds(ResourceMover.ItemMovingDelay);
         }
     }
 

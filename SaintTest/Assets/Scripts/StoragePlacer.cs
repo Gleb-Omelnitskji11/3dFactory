@@ -1,22 +1,8 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public class StoragePlacer : ItemsPlacer
 {
-    private const float DeltaDepth = 0.05f;
-    [SerializeField] private List<ResourceView> Items;
-
-    protected override void OnItemAdded(ResourceView item)
-    {
-        Items.Add(item);
-        base.OnItemAdded(item);
-    }
-
-    protected override void OnItemRemoved(ResourceView item)
-    {
-        Items.Remove(item);
-        base.OnItemRemoved(item);
-    }
+    [SerializeField] private float _deltaDepth = 0.05f;
 
     protected override void UpdatePositions()
     {
@@ -26,7 +12,7 @@ public class StoragePlacer : ItemsPlacer
             Items[i].transform.localPosition = new Vector3(
                 0f,
                 0f,
-                -i * (depthZ + DeltaDepth)
+                -i * (depthZ + _deltaDepth)
             );
 
             Items[i].transform.localRotation = Quaternion.identity;

@@ -151,10 +151,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1c1a1df4384537428b0d819bd0c711c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _resourceView1: {fileID: 3671771900342919410, guid: dc7d141669ee6ee43996db01fcafc690, type: 3}
-  _resourceView2: {fileID: 1303252727188232044, guid: a0ff526ead0ecc148b2b56ef261b5cfe, type: 3}
-  _resourceView3: {fileID: 8535096591046201588, guid: f6abe7d880dba1b46b72e77f67c0fe0c, type: 3}
   _initialPoolSize: 0
+  _resourcePrefabs:
+  - Type: 0
+    Prefab: {fileID: 3671771900342919410, guid: dc7d141669ee6ee43996db01fcafc690, type: 3}
+  - Type: 1
+    Prefab: {fileID: 1303252727188232044, guid: a0ff526ead0ecc148b2b56ef261b5cfe, type: 3}
+  - Type: 2
+    Prefab: {fileID: 8535096591046201588, guid: f6abe7d880dba1b46b72e77f67c0fe0c, type: 3}
 --- !u!4 &713492246
 Transform:
   m_ObjectHideFlags: 0
@@ -265,7 +269,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2929252283123773939, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 917009765}
   m_SourcePrefab: {fileID: 100100000, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
 --- !u!224 &917009762 stripped
 RectTransform:
@@ -277,12 +284,30 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2929252283123773951, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
   m_PrefabInstance: {fileID: 917009761}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 917009764}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 45977bbae16431c46a013576a1aea384, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &917009764 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2929252283123773939, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
+  m_PrefabInstance: {fileID: 917009761}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &917009765
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 917009764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41337ce6612c0844a8ca3f4ee4404c19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _joystick: {fileID: 917009763}
 --- !u!1 &923618370
 GameObject:
   m_ObjectHideFlags: 0
@@ -478,10 +503,6 @@ PrefabInstance:
     - target: {fileID: 85296177856156134, guid: 055c0b5695e977547a63f42556aec1db, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5336457387313912331, guid: 055c0b5695e977547a63f42556aec1db, type: 3}
-      propertyPath: _recipe.Result._amount
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7367151333723619614, guid: 055c0b5695e977547a63f42556aec1db, type: 3}
       propertyPath: m_Name

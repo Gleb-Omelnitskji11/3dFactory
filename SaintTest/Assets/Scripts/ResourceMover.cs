@@ -3,12 +3,14 @@ using UnityEngine;
 
 public class ResourceMover : MonoBehaviour
 {
-    public static IEnumerator Move(Transform item, Vector3 from, Vector3 to, float duration)
+    public const float ItemMovingDelay = 0.5f;
+
+    public static IEnumerator Move(Transform item, Vector3 from, Vector3 to)
     {
         float t = 0f;
         while (t < 1f)
         {
-            t += Time.deltaTime / duration;
+            t += Time.deltaTime / ItemMovingDelay;
             item.position = Vector3.Lerp(from, to, t);
             yield return null;
         }

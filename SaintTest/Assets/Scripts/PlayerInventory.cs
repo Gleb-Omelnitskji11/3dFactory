@@ -8,7 +8,6 @@ public class PlayerInventory : StorageBase
     [SerializeField] private int _maxCapacity;
     [SerializeField] private List<ResourceView> _items = new();
     
-    public override object Items => _items;
 
     public override bool CanAdd(ResourceType type = ResourceType.N1)
     {

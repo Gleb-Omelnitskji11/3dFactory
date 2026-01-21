@@ -1,17 +1,17 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class InstanceCreator : MonoBehaviour
 {
-    [SerializeField] private ResourceView _resourceView1;
-    [SerializeField] private ResourceView _resourceView2;
-    [SerializeField] private ResourceView _resourceView3;
     [SerializeField] private int _initialPoolSize = 0;
+    [SerializeField] private ResourceViewPrefab[] _resourcePrefabs;
 
-    private readonly Dictionary<ResourceType, ResourceView> _prefabs = new();
     private readonly Dictionary<ResourceType, Queue<ResourceView>> _pools = new();
     private readonly Dictionary<ResourceType, int> _typeCounts = new();
-    public static InstanceCreator Instance;
+
+    public static InstanceCreator Instance { get; private set; }
 
     private void Awake()
     {
@@ -22,7 +22,10 @@ public class InstanceCreator : MonoBehaviour
 
     public ResourceView CreateObject(ResourceType resourceType)
     {
-        var pool = _pools[resourceType];
+        if (!_pools.TryGetValue(resourceType, out var pool))
+        {
+            throw new Exception($"Resource type {resourceType} is not registered");
+        }
 
         ResourceView item;
         if (pool.Count > 0)
@@ -44,10 +47,13 @@ public class InstanceCreator : MonoBehaviour
     public void ReturnToPool(PooledObject itemObj)
     {
         if (itemObj == null) return;
-        
+
         var item = itemObj as ResourceView;
         var resourceType = item.Type;
-        if (!_pools.ContainsKey(resourceType)) return;
+        if (!_pools.ContainsKey(resourceType))
+        {
+            throw new Exception($"Resource type {resourceType} is not present in pool");
+        }
 
         item.gameObject.SetActive(false);
         item.transform.SetParent(transform);
@@ -62,26 +68,25 @@ public class InstanceCreator : MonoBehaviour
 
     private void InitCollection()
     {
-        _prefabs.Add(ResourceType.N1, _resourceView1);
-        _prefabs.Add(ResourceType.N2, _resourceView2);
-        _prefabs.Add(ResourceType.N3, _resourceView3);
+        foreach (ResourceType type in (ResourceType[])Enum.GetValues(typeof(ResourceType)))
+        {
+            _pools.Add(type, new Queue<ResourceView>());
+            _typeCounts.Add(type, 0);
 
-        _pools.Add(ResourceType.N1, new Queue<ResourceView>());
-        _pools.Add(ResourceType.N2, new Queue<ResourceView>());
-        _pools.Add(ResourceType.N3, new Queue<ResourceView>());
-
-        _typeCounts.Add(ResourceType.N1, 0);
-        _typeCounts.Add(ResourceType.N2, 0);
-        _typeCounts.Add(ResourceType.N3, 0);
+            if (Array.FindIndex(_resourcePrefabs, x => x.Type == type) == -1)
+            {
+                throw new Exception($"Resource type {type} is not registered");
+            }
+        }
     }
 
     private void Prewarm()
     {
-        foreach (var resourceType in _prefabs.Keys)
+        foreach (var resource in _resourcePrefabs)
         {
             for (int i = 0; i < _initialPoolSize; i++)
             {
-                var obj = CreateNewObject(resourceType);
+                var obj = CreateNewObject(resource.Type);
                 ReturnToPool(obj);
             }
         }
@@ -89,11 +94,18 @@ public class InstanceCreator : MonoBehaviour
 
     private ResourceView CreateNewObject(ResourceType resourceType)
     {
-        var prefab = _prefabs[resourceType];
+        var prefab = _resourcePrefabs.First(x => x.Type == resourceType).Prefab;
         var item = Instantiate(prefab);
         item.name = $"{prefab.name}_{++_typeCounts[resourceType]}";
         item.Type = resourceType;
         item.gameObject.SetActive(false);
         return item;
+    }
+
+    [System.Serializable]
+    public class ResourceViewPrefab
+    {
+        public ResourceType Type;
+        public ResourceView Prefab;
     }
 }
