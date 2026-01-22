@@ -11,10 +11,10 @@ public class ResourceMover : MonoBehaviour
         while (t < 1f)
         {
             t += Time.deltaTime / ItemMovingDelay;
-            item.position = Vector3.Lerp(from, to, t);
+            item.localPosition = Vector3.Lerp(from, to, t);
             yield return null;
         }
 
-        item.position = to;
+        item.localPosition = to;
     }
 }

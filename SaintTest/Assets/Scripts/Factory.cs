@@ -7,6 +7,8 @@ public class Factory : MonoBehaviour
     [SerializeField] private StorageBase _inputStorage;
     [SerializeField] private StorageBase _outputStorage;
     [SerializeField] private Recipe _recipe;
+    [SerializeField] private Transform _inputPoint;
+    [SerializeField] private Transform _outputPoint;
 
     [SerializeField] private WorkStatus _workStatus;
 
@@ -25,28 +27,25 @@ public class Factory : MonoBehaviour
                 continue;
             }
 
-            if (_recipe.Ingredients.Count > 0)
+            List<ResourceView> ingredients = new List<ResourceView>();
+            if (_recipe.Ingredients.Count > 0 && !TryGetIngredientsFromStock(out ingredients))
             {
-                if(GetIngredientsFromStock(out List<ResourceView> ingredients))
-                    DestroyIngredients(ingredients);
-                else
-                {
-                    _workStatus = WorkStatus.NonResources;
-                    yield return new WaitForSeconds(_recipe.ProductionTime);
-                    continue;
-                }
+                _workStatus = WorkStatus.NonResources;
+                yield return new WaitForSeconds(_recipe.ProductionTime);
+                continue;
             }
 
+            StartCoroutine(TakeIngredients(ingredients));
             yield return new WaitForSeconds(_recipe.ProductionTime);
-
             ResourceModel itemModel = new ResourceModel(_recipe.Result.Type, _recipe.Result.Amount);
-            
-            var item = InstanceCreator.Instance.CreateObject(itemModel.Type);
+
+            var item = InstanceCreator.Instance.GetObject(itemModel.Type);
+            item.transform.position = _outputPoint.position;
             _outputStorage.TryAdd(item);
         }
     }
 
-    private bool GetIngredientsFromStock(out List<ResourceView> ingredients)
+    private bool TryGetIngredientsFromStock(out List<ResourceView> ingredients)
     {
         ingredients = new List<ResourceView>();
         foreach (var ingredient in _recipe.Ingredients)
@@ -56,16 +55,28 @@ public class Factory : MonoBehaviour
                 ingredients.AddRange(items);
                 continue;
             }
-            
+
             return false;
         }
-        
+
         _inputStorage.RemoveItems(ingredients);
         return true;
     }
 
-    private void DestroyIngredients(List<ResourceView> ingredients)
+    private IEnumerator TakeIngredients(List<ResourceView> ingredients)
     {
+        foreach (var ingredient in ingredients)
+        {
+            ingredient.transform.SetParent(transform);
+            Vector3 oldPos = ingredient.transform.localPosition;
+            ingredient.gameObject.SetActive(true);
+            StartCoroutine(ResourceMover.Move(ingredient.transform, oldPos, _inputPoint.localPosition));
+
+            yield return new WaitForEndOfFrame();
+        }
+        
+        yield return new WaitForSeconds(ResourceMover.ItemMovingDelay);
+
         foreach (var ingredient in ingredients)
         {
             ingredient.TurnOff();
@@ -96,7 +107,7 @@ public class Factory : MonoBehaviour
         {
             Debug.Log($"No input resources for {gameObject.name}");
         }
-        
+
         _workStatus = WorkStatus.NonResources;
     }
 
@@ -106,7 +117,7 @@ public class Factory : MonoBehaviour
         {
             Debug.Log($"Output storage full for {gameObject.name}");
         }
-        
+
         _workStatus = WorkStatus.Done;
     }
 }

@@ -24,9 +24,18 @@ public abstract class ItemsPlacer : MonoBehaviour
     protected virtual void OnItemAdded(ResourceView item)
     {
         Items.Add(item);
-        item.gameObject.SetActive(true);
         item.transform.SetParent(_itemsRoot);
+        var oldPos = item.transform.localPosition;
         UpdatePositions();
+        MoveResource(item, oldPos);
+    }
+
+    protected void MoveResource(ResourceView resource, Vector3 oldPos)
+    {
+        var newPos = resource.transform.localPosition;
+        resource.transform.localPosition = oldPos;
+        resource.gameObject.SetActive(true);
+        StartCoroutine(ResourceMover.Move(resource.transform, oldPos, newPos));
     }
 
     protected abstract void UpdatePositions();

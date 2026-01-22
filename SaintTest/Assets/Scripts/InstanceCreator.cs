@@ -25,7 +25,7 @@ public class InstanceCreator : MonoBehaviour
         Init();
     }
 
-    public ResourceView CreateObject(ResourceType resourceType)
+    public ResourceView GetObject(ResourceType resourceType)
     {
         if (!_pools.TryGetValue(resourceType, out var pool))
         {
