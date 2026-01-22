@@ -1,19 +1,15 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Storage : StorageBase
+public class Stock : StorageBase
 {
     [SerializeField] private int _capacity = 10;
     [SerializeField] private List<ResourceType> _acceptedTypes;
-    [SerializeField] private bool _isOutput;
 
     private readonly SortedDictionary<ResourceType, List<ResourceView>> _itemsByType = new();
     private readonly Dictionary<ResourceType, int> _capacityPerType = new();
 
-    private bool _isPlayerInside;
-    private PlayerInventory _movingInventory;
-
+    public IReadOnlyList<ResourceType> AcceptedTypes => _acceptedTypes;
 
     protected override void Awake()
     {
@@ -57,7 +53,7 @@ public class Storage : StorageBase
         if (!CanAdd(type))
             return false;
 
-        Add(item);
+        AddItem(item);
         return true;
     }
 
@@ -82,7 +78,7 @@ public class Storage : StorageBase
         }
 
         item = itemsType[^1];
-        Remove(item);
+        RemoveItem(item);
 
         return true;
     }
@@ -94,19 +90,19 @@ public class Storage : StorageBase
 
         foreach (var item in items)
         {
-            Remove(item);
+            RemoveItem(item);
         }
 
         return items;
     }
 
-    private void Remove(ResourceView item)
+    protected override void RemoveItem(ResourceView item)
     {
         if (_itemsByType[item.Type].Remove(item))
             base.RemoveItem(item);
     }
 
-    private void Add(ResourceView item)
+    protected override void AddItem(ResourceView item)
     {
         _itemsByType[item.Type].Add(item);
         base.AddItem(item);
@@ -116,79 +112,5 @@ public class Storage : StorageBase
     private bool HasItem(ResourceType type)
     {
         return _itemsByType[type].Count > 0;
-    }
-
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.TryGetComponent(out PlayerInventory inventory))
-        {
-            _movingInventory = inventory;
-            _isPlayerInside = true;
-            StartCoroutine(MoveItems());
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.TryGetComponent(out PlayerInventory inventory) &&
-            inventory == _movingInventory)
-        {
-            _isPlayerInside = false;
-            _movingInventory = null;
-        }
-    }
-
-    private IEnumerator MoveItems()
-    {
-        while (_isPlayerInside)
-        {
-            bool success = _isOutput ? TryGiveItems() : TryTakeItems();
-
-            yield return new WaitForSeconds(ResourceMover.ItemMovingDelay);
-        }
-    }
-
-    private bool TryGiveItems()
-    {
-        foreach (var type in _acceptedTypes)
-        {
-            if (!HasItem(type))
-                continue;
-
-            if (_movingInventory.CanAdd())
-            {
-                var item = _itemsByType[type][^1];
-                Remove(item);
-                if (!_movingInventory.TryAdd(item))
-                {
-                    Add(item);
-                    return false;
-                }
-
-                return true;
-            }
-
-            return false;
-        }
-
-        return false;
-    }
-
-    private bool TryTakeItems()
-    {
-        foreach (var type in _acceptedTypes)
-        {
-            if (!CanAdd(type))
-                continue;
-
-            if (_movingInventory.TryGet(type, out var item))
-            {
-                Add(item);
-                return true;
-            }
-        }
-
-        return false;
     }
 }

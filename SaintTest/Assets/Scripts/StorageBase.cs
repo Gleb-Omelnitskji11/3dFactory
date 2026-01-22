@@ -32,30 +32,3 @@ public abstract class StorageBase : MonoBehaviour
     public event Action<ResourceView> OnItemRemoved;
     public event Action<ResourceView> OnItemAdded;
 }
-
-public class TriggerStorageTransport
-{
-    [SerializeField] private Storage _storage;
-    [SerializeField] private bool _isOutput;
-    [SerializeField] private float _tickInterval = 0.5f;
-    
-    private bool _isPlayerInside;
-    private PlayerInventory _movingInventory;
-    
-    private Func<bool> _action;
-
-    private void Awake()
-    {
-        _action = _isOutput ? TryGetItems : TryAddItems;
-    }
-    
-    private bool TryGetItems()
-    {
-        return false;
-    }
-
-    private bool TryAddItems()
-    {
-        return false;
-    }
-}

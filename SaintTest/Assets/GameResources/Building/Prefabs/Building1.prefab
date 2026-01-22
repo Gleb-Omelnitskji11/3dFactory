@@ -133,7 +133,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _inputStorage: {fileID: 0}
-  _outputStorage: {fileID: 6649577719628714832}
+  _outputStorage: {fileID: 1306673696446971685}
   _recipe:
     _ingredients: []
     _result:
@@ -297,9 +297,9 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4b6338c2c6cc96b42826742dfa086564, type: 3}
---- !u!114 &6649577719628714832 stripped
+--- !u!114 &1306673696446971685 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7807182097169064280, guid: 4b6338c2c6cc96b42826742dfa086564, type: 3}
+  m_CorrespondingSourceObject: {fileID: 2464200967991463213, guid: 4b6338c2c6cc96b42826742dfa086564, type: 3}
   m_PrefabInstance: {fileID: 3463450034075300360}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}

@@ -50,8 +50,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56b6490b64b4fdc4d988bc1d2e4c3671, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _inputStorage: {fileID: 9056277997514468310}
-  _outputStorage: {fileID: 3264765336266851721}
+  _inputStorage: {fileID: 3730224738988591011}
+  _outputStorage: {fileID: 7144100712261282300}
   _recipe:
     _ingredients:
     - _type: 0
@@ -296,14 +296,9 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4b6338c2c6cc96b42826742dfa086564, type: 3}
---- !u!4 &5017820301113748764 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6076502558986528658, guid: 4b6338c2c6cc96b42826742dfa086564, type: 3}
-  m_PrefabInstance: {fileID: 1294488143034321550}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &9056277997514468310 stripped
+--- !u!114 &3730224738988591011 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7807182097169064280, guid: 4b6338c2c6cc96b42826742dfa086564, type: 3}
+  m_CorrespondingSourceObject: {fileID: 2464200967991463213, guid: 4b6338c2c6cc96b42826742dfa086564, type: 3}
   m_PrefabInstance: {fileID: 1294488143034321550}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
@@ -312,6 +307,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b3b832b85f2c4d4ab81bb351275db69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &5017820301113748764 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6076502558986528658, guid: 4b6338c2c6cc96b42826742dfa086564, type: 3}
+  m_PrefabInstance: {fileID: 1294488143034321550}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4690050438303376593
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -410,9 +410,9 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6076502558986528658, guid: 4b6338c2c6cc96b42826742dfa086564, type: 3}
   m_PrefabInstance: {fileID: 4690050438303376593}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &3264765336266851721 stripped
+--- !u!114 &7144100712261282300 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7807182097169064280, guid: 4b6338c2c6cc96b42826742dfa086564, type: 3}
+  m_CorrespondingSourceObject: {fileID: 2464200967991463213, guid: 4b6338c2c6cc96b42826742dfa086564, type: 3}
   m_PrefabInstance: {fileID: 4690050438303376593}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
