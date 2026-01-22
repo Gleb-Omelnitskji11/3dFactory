@@ -7,10 +7,10 @@ public abstract class ItemsPlacer : MonoBehaviour
 
     protected readonly List<ResourceView> Items = new();
 
-    public virtual void Init(StorageBase playerInventory)
+    public virtual void Init(StorageBase storage)
     {
-        playerInventory.OnItemRemoved += OnItemRemoved;
-        playerInventory.OnItemAdded += OnItemAdded;
+        storage.OnItemRemoved += OnItemRemoved;
+        storage.OnItemAdded += OnItemAdded;
     }
 
     protected virtual void OnItemRemoved(ResourceView item)

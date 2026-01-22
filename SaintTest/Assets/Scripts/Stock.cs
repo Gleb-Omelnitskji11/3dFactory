@@ -31,11 +31,11 @@ public class Stock : StorageBase
         return value.Count < _capacityPerType[type];
     }
 
-    public override bool HasItems(List<ResourceModel> ingridients)
+    public override bool HasItems(List<ResourceModel> ingredients)
     {
-        foreach (var item in ingridients)
+        foreach (var item in ingredients)
         {
-            if (_itemsByType[item.Type].Count < item.Amount)
+            if (!_itemsByType.TryGetValue(item.Type, out var itemList) || itemList.Count < item.Amount)
                 return false;
         }
 
@@ -44,7 +44,7 @@ public class Stock : StorageBase
 
     public override bool HasItem(ResourceModel ingridient)
     {
-        return _itemsByType[ingridient.Type].Count >= ingridient.Amount;
+        return _itemsByType.TryGetValue(ingridient.Type, out var itemList) && itemList.Count >= ingridient.Amount;
     }
 
     public override bool TryAdd(ResourceView item)
@@ -57,7 +57,7 @@ public class Stock : StorageBase
         return true;
     }
 
-    public override bool TryGet(ResourceModel itemModel, out List<ResourceView> items)
+    public override bool TryGetWithoutRemoving(ResourceModel itemModel, out List<ResourceView> items)
     {
         if (!HasItem(itemModel))
         {
@@ -69,15 +69,16 @@ public class Stock : StorageBase
         return true;
     }
 
+
     public override bool TryGet(ResourceType itemType, out ResourceView item)
     {
-        if (!_itemsByType.TryGetValue(itemType, out var itemsType))
+        if (!_itemsByType.TryGetValue(itemType, out var itemsList) || itemsList.Count == 0)
         {
             item = null;
             return false;
         }
 
-        item = itemsType[^1];
+        item = itemsList[^1];
         RemoveItem(item);
 
         return true;
@@ -87,11 +88,6 @@ public class Stock : StorageBase
     {
         List<ResourceView> items = _itemsByType[itemModel.Type]
             .GetRange(_itemsByType[itemModel.Type].Count - itemModel.Amount, itemModel.Amount);
-
-        foreach (var item in items)
-        {
-            RemoveItem(item);
-        }
 
         return items;
     }

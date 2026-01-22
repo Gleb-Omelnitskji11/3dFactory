@@ -7,16 +7,16 @@ public class PlayerInventory : StorageBase
 {
     [SerializeField] private int _maxCapacity;
     [SerializeField] private List<ResourceView> _items = new();
-    
+
 
     public override bool CanAdd(ResourceType type = ResourceType.N1)
     {
         return _items.Count < _maxCapacity;
     }
 
-    public override bool HasItems(List<ResourceModel> ingridients)
+    public override bool HasItems(List<ResourceModel> ingredients)
     {
-        foreach (var item in ingridients)
+        foreach (var item in ingredients)
         {
             if (_items.Count(x => x.Type == item.Type) < item.Amount)
                 return false;
@@ -42,6 +42,11 @@ public class PlayerInventory : StorageBase
         return true;
     }
 
+    public void AddWithoutChecking(ResourceView item)
+    {
+        AddItem(item);
+    }
+
     public override bool TryGet(ResourceType type, out ResourceView item)
     {
         int lastIndex = _items.FindLastIndex(x => x.Type == type);
@@ -56,28 +61,16 @@ public class PlayerInventory : StorageBase
 
         return true;
     }
-    
-    public override bool TryGet(ResourceModel itemModel, out List<ResourceView> output)
+
+    public override bool TryGetWithoutRemoving(ResourceModel itemModel, out List<ResourceView> output)
     {
-        output = new List<ResourceView>();
-        int count = itemModel.Amount;
-        while (count > 0)
+        if (!HasItem(itemModel))
         {
-            var lastIndex = _items.FindLastIndex(x => x.Type == itemModel.Type);
-            if (lastIndex == -1)
-            {
-                output = null;
-                return false;
-            }
-            output.Add(_items[lastIndex]);
-            count--;
+            output = null;
+            return false;
         }
 
-        foreach (var item in output)
-        {
-            RemoveItem(item);
-        }
-
+        output = GetItems(itemModel);
         return true;
     }
 
@@ -93,5 +86,12 @@ public class PlayerInventory : StorageBase
     {
         _items.Add(item);
         base.AddItem(item);
+    }
+
+    private List<ResourceView> GetItems(ResourceModel itemModel)
+    {
+        List<ResourceView> items = _items.GetRange(_items.Count - itemModel.Amount, itemModel.Amount);
+
+        return items;
     }
 }

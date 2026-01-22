@@ -1,11 +1,12 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class StockInteraction : MonoBehaviour
 {
     [SerializeField] private Stock _stock;
-    [SerializeField] private bool _isOutput;
+    [SerializeField] private bool _isStockOutput;
 
     private bool _isPlayerInside;
     private PlayerInventory _playerInventory;
@@ -13,7 +14,7 @@ public class StockInteraction : MonoBehaviour
 
     private void Awake()
     {
-        _action = _isOutput ? TryGiveItems: TryTakeItems;
+        _action = _isStockOutput ? TryGiveItems: TryTakeItems;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -85,7 +86,7 @@ public class StockInteraction : MonoBehaviour
                     return true;
                 }
 
-                _playerInventory.TryAdd(item);
+                _playerInventory.AddWithoutChecking(item);
             }
         }
 

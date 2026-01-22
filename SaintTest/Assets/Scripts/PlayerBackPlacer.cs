@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class StackInventory : ItemsPlacer
+public class PlayerBackPlacer : ItemsPlacer
 {
     [SerializeField] private float _deltaDepth = 0.1f;
 

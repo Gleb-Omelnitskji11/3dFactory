@@ -9,7 +9,8 @@ public class JoystickInstance : MonoBehaviour
     {
         if (Instance != null)
         {
-            Destroy(Instance);
+            Destroy(this);
+            return;
         }
         
         Instance = _joystick;

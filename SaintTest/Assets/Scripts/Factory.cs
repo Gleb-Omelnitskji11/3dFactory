@@ -51,7 +51,7 @@ public class Factory : MonoBehaviour
         ingredients = new List<ResourceView>();
         foreach (var ingredient in _recipe.Ingredients)
         {
-            if (_inputStorage.TryGet(ingredient, out List<ResourceView> items))
+            if (_inputStorage.TryGetWithoutRemoving(ingredient, out List<ResourceView> items))
             {
                 ingredients.AddRange(items);
                 continue;
@@ -60,6 +60,7 @@ public class Factory : MonoBehaviour
             return false;
         }
         
+        _inputStorage.RemoveItems(ingredients);
         return true;
     }
 
@@ -67,7 +68,7 @@ public class Factory : MonoBehaviour
     {
         foreach (var ingredient in ingredients)
         {
-            ingredient.Destroy();
+            ingredient.TurnOff();
         }
     }
 
@@ -93,7 +94,7 @@ public class Factory : MonoBehaviour
     {
         if (_workStatus != WorkStatus.NonResources)
         {
-            Debug.LogError($"No input resources for {gameObject.name}");
+            Debug.Log($"No input resources for {gameObject.name}");
         }
         
         _workStatus = WorkStatus.NonResources;
@@ -103,7 +104,7 @@ public class Factory : MonoBehaviour
     {
         if (_workStatus != WorkStatus.Done)
         {
-            Debug.LogError($"Output storage full for {gameObject.name}");
+            Debug.Log($"Output storage full for {gameObject.name}");
         }
         
         _workStatus = WorkStatus.Done;

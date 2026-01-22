@@ -2,16 +2,16 @@ using UnityEngine;
 
 public abstract class PooledObject : MonoBehaviour
 {
-    public virtual void Destroy()
+    public virtual void TurnOff()
     {
         gameObject.SetActive(false);
         if (InstanceCreator.Instance != null)
         {
-            InstanceCreator.Instance?.ReturnToPool(this);
+            InstanceCreator.Instance.ReturnToPool(this);
         }
         else
         {
-            UnityEngine.Object.Destroy(gameObject);
+            Destroy(gameObject);
         }
     }
 }

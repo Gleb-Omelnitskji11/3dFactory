@@ -309,6 +309,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 790104277277361603}
     m_Modifications:
+    - target: {fileID: 2464200967991463213, guid: 4b6338c2c6cc96b42826742dfa086564, type: 3}
+      propertyPath: _acceptedTypes.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2464200967991463213, guid: 4b6338c2c6cc96b42826742dfa086564, type: 3}
+      propertyPath: _acceptedTypes.Array.data[1]
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5069492590045318783, guid: 4b6338c2c6cc96b42826742dfa086564, type: 3}
       propertyPath: m_Name
       value: InputStock
@@ -414,6 +422,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 790104277277361603}
     m_Modifications:
+    - target: {fileID: 2464200967991463213, guid: 4b6338c2c6cc96b42826742dfa086564, type: 3}
+      propertyPath: _acceptedTypes.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2464200967991463213, guid: 4b6338c2c6cc96b42826742dfa086564, type: 3}
+      propertyPath: _acceptedTypes.Array.data[0]
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3955165641468816358, guid: 4b6338c2c6cc96b42826742dfa086564, type: 3}
+      propertyPath: _isStockOutput
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5069492590045318783, guid: 4b6338c2c6cc96b42826742dfa086564, type: 3}
       propertyPath: m_Name
       value: OutPutstock

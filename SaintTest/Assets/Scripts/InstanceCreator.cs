@@ -15,7 +15,12 @@ public class InstanceCreator : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance != null) Destroy(Instance);
+        if (Instance != null)
+        {
+            Destroy(this);
+            return;
+        }
+
         Instance = this;
         Init();
     }
