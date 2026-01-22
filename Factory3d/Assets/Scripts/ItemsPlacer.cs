@@ -35,7 +35,7 @@ public abstract class ItemsPlacer : MonoBehaviour
         var newPos = resource.transform.localPosition;
         resource.transform.localPosition = oldPos;
         resource.gameObject.SetActive(true);
-        StartCoroutine(ResourceMover.Move(resource.transform, oldPos, newPos));
+        ResourceMover.Move(resource.transform, oldPos, newPos);
     }
 
     protected abstract void UpdatePositions();

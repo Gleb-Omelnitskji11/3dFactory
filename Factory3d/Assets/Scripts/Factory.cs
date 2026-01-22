@@ -70,7 +70,7 @@ public class Factory : MonoBehaviour
             ingredient.transform.SetParent(transform);
             Vector3 oldPos = ingredient.transform.localPosition;
             ingredient.gameObject.SetActive(true);
-            StartCoroutine(ResourceMover.Move(ingredient.transform, oldPos, _inputPoint.localPosition));
+            ResourceMover.Move(ingredient.transform, oldPos, _inputPoint.localPosition);
 
             yield return new WaitForEndOfFrame();
         }
