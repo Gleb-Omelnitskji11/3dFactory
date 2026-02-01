@@ -2,17 +2,17 @@ using UnityEngine;
 
 namespace Game.Input
 {
-    public class JoystickInputController : IInputController
+    public class JoystickInputController : MonoBehaviour, IInputController
     {
-        private FixedJoystick _joystick;
+        [SerializeField] private FixedJoystick _joystick;
 
         public float Horizontal => _joystick.Horizontal;
         public float Vertical => _joystick.Vertical;
-        public Vector2 Direction => _joystick.Direction;
+        public Vector3 Direction => new Vector3(_joystick.Horizontal, 0, _joystick.Vertical);
 
-        public void Setup(FixedJoystick joystick)
+        private void Awake()
         {
-            _joystick = joystick;
+            InputInstanceHolder.UpdateInputInstance(this);
         }
     }
 }

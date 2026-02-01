@@ -1,5 +1,3 @@
-# SaintTest
-
 A 3D Unity game featuring resource management, storage systems, and factory production. The player collects resources from stocks, carries them in an inventory, and factories consume ingredients to produce new items via configurable recipes.
 
 ## Requirements
@@ -57,13 +55,6 @@ SaintTest/
 | `StorageBase` | Abstract storage API (`CanAdd`, `HasItems`, `TryAdd`, `TryGet`) and `OnItemAdded` / `OnItemRemoved` for `ItemsPlacer` |
 | `InstanceCreator` | Singleton; object pools for `ResourceView` by `ResourceType`; `CreateObject` / `ReturnToPool` |
 
-## How to Run
-
-1. Clone or open the repository.
-2. Open the `SaintTest` folder as a Unity project (Unity Hub → Add → select `SaintTest`).
-3. Open `Assets/Scenes/SampleScene.unity`.
-4. Press **Play** in the Unity Editor.
-
 ## Dependencies
 
 - **Joystick Pack** — Included under `Assets/Joystick Pack` for mobile-style joystick input.
@@ -71,4 +62,3 @@ SaintTest/
 
 ---
 
-*SaintTest — Unity 2022.3*
