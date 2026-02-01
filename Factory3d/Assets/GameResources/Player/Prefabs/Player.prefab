@@ -97,7 +97,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _itemsPlacer: {fileID: 4975892119631119231}
-  _maxCapacity: 20
+  _maxCapacity: 10
   _items: []
 --- !u!114 &4975892119631119231
 MonoBehaviour:
